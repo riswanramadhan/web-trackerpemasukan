@@ -4,8 +4,15 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="color-scheme" content="light dark" />
-  <title>BBI Cash Tracker</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23007aff'/%3E%3Cpath d='M18 24l14-8 14 8v16l-14 8-14-8V24z' fill='none' stroke='white' stroke-width='4' stroke-linejoin='round'/%3E%3Cpath d='M18 24l14 8 14-8M32 32v16' fill='none' stroke='white' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E" />
+  <meta name="theme-color" content="#eef6ff" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="BBI Flow" />
+  <meta name="description" content="Pelacak pemasukan, checkout, profit, target, dan prediksi paket BBI." />
+  <title>BBI Flow — Smart Cash Tracker</title>
+  <link rel="manifest" href="manifest.webmanifest" />
+  <link rel="apple-touch-icon" href="icons/icon.svg" />
+  <link rel="icon" href="icons/icon.svg" type="image/svg+xml" />
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   <style>
     :root {
@@ -1648,10 +1655,252 @@
         text-align: left;
       }
     }
+
+    /* Liquid interface refresh */
+    :root {
+      --bg: #edf5ff;
+      --surface: rgba(255, 255, 255, 0.62);
+      --surface-solid: rgba(255, 255, 255, 0.9);
+      --surface-raised: rgba(245, 249, 255, 0.82);
+      --surface-muted: rgba(211, 228, 250, 0.54);
+      --accent: #087cff;
+      --accent-strong: #0063db;
+      --violet: #6e5cff;
+      --cyan: #00a6d7;
+      --radius-card: 24px;
+      --radius-control: 16px;
+      --shadow: 0 28px 80px rgba(31, 75, 137, 0.2);
+      --shadow-soft: 0 14px 40px rgba(50, 91, 145, 0.1);
+    }
+
+    html[data-theme="dark"] {
+      --surface: rgba(24, 30, 43, 0.62);
+      --surface-solid: rgba(28, 34, 48, 0.92);
+      --surface-raised: rgba(34, 42, 58, 0.8);
+      --surface-muted: rgba(66, 81, 108, 0.42);
+    }
+
+    body {
+      min-height: 100dvh;
+      background:
+        radial-gradient(circle at 8% 4%, rgba(84, 174, 255, 0.3), transparent 34%),
+        radial-gradient(circle at 96% 24%, rgba(141, 108, 255, 0.2), transparent 30%),
+        linear-gradient(155deg, #f8fbff 0%, #eaf3ff 48%, #f7f1ff 100%);
+      background-attachment: fixed;
+    }
+
+    body::before,
+    body::after {
+      content: "";
+      position: fixed;
+      z-index: -1;
+      width: 44vw;
+      height: 44vw;
+      border-radius: 50%;
+      filter: blur(74px);
+      opacity: 0.3;
+      pointer-events: none;
+      animation: ambientFloat 14s ease-in-out infinite alternate;
+    }
+
+    body::before { left: -18vw; top: 26vh; background: #2b9eff; }
+    body::after { right: -17vw; bottom: 8vh; background: #8a68ff; animation-delay: -7s; }
+    html[data-theme="dark"] body { background: radial-gradient(circle at 12% 5%, #132b4a 0, transparent 34%), radial-gradient(circle at 95% 20%, #261e4e 0, transparent 34%), #080b12; }
+
+    @keyframes ambientFloat {
+      to { transform: translate3d(5vw, -4vh, 0) scale(1.12); }
+    }
+
+    .sidebar,
+    .topbar,
+    .bottom-nav::before,
+    .panel,
+    .metric-card,
+    .tool-card,
+    .history-card,
+    .modal-panel,
+    .lifetime-strip,
+    .insight-card,
+    .dream-hero {
+      -webkit-backdrop-filter: blur(30px) saturate(175%);
+      backdrop-filter: blur(30px) saturate(175%);
+    }
+
+    .metric-card,
+    .panel,
+    .tool-card,
+    .history-card,
+    .lifetime-strip,
+    .insight-card,
+    .dream-hero {
+      position: relative;
+      overflow: hidden;
+      border-color: rgba(255, 255, 255, 0.58);
+      box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(255,255,255,.7);
+    }
+
+    html[data-theme="dark"] .metric-card,
+    html[data-theme="dark"] .panel,
+    html[data-theme="dark"] .tool-card,
+    html[data-theme="dark"] .history-card,
+    html[data-theme="dark"] .lifetime-strip,
+    html[data-theme="dark"] .insight-card,
+    html[data-theme="dark"] .dream-hero { border-color: rgba(255,255,255,.1); box-shadow: var(--shadow-soft), inset 0 1px 0 rgba(255,255,255,.1); }
+
+    .metric-card::after,
+    .insight-card::after,
+    .dream-hero::after {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(125deg, rgba(255,255,255,.32), transparent 32%);
+      pointer-events: none;
+    }
+
+    .brand-mark {
+      position: relative;
+      overflow: hidden;
+      border: 1px solid rgba(255,255,255,.66);
+      border-radius: 14px;
+      background: linear-gradient(145deg, #20a8ff, #1769ef 52%, #7449e8);
+      color: #fff;
+      box-shadow: 0 9px 24px rgba(26, 107, 235, .25), inset 0 1px 1px rgba(255,255,255,.72);
+    }
+
+    .brand-mark::after { content:""; position:absolute; inset:1px; border-radius:12px; background:linear-gradient(145deg,rgba(255,255,255,.3),transparent 42%); pointer-events:none; }
+    .brand-mark .icon { filter: drop-shadow(0 2px 2px rgba(0,0,0,.2)); }
+
+    .topbar {
+      top: max(10px, env(safe-area-inset-top));
+      left: 10px;
+      right: 10px;
+      min-height: 58px;
+      border: 1px solid rgba(255,255,255,.62);
+      border-radius: 22px;
+      box-shadow: 0 12px 36px rgba(46, 78, 124, .12), inset 0 1px 0 rgba(255,255,255,.75);
+    }
+
+    .main { padding-top: calc(84px + env(safe-area-inset-top)); }
+    .page-title { font-size: clamp(1.72rem, 5vw, 2.5rem); letter-spacing: -.045em; font-weight: 820; }
+    .page-kicker { margin: 0 0 7px; color: var(--accent); font-size: .72rem; font-weight: 820; letter-spacing: .12em; text-transform: uppercase; }
+
+    .btn,
+    .icon-btn,
+    .q-btn,
+    .toggle-btn,
+    .bnav-btn,
+    .nav-btn { position: relative; overflow: hidden; }
+
+    .btn { border: 1px solid rgba(255,255,255,.32); background: linear-gradient(145deg, #2498ff, #096be8); box-shadow: 0 10px 24px rgba(0,105,225,.22), inset 0 1px 0 rgba(255,255,255,.46); }
+    .btn:active, .icon-btn:active, .q-btn:active, .nav-btn:active, .bnav-btn:active { transform: scale(.94); }
+    .tap-pulse::after { content:""; position:absolute; inset:0; border-radius:inherit; background:rgba(255,255,255,.34); animation:tapFlash .36s ease-out both; pointer-events:none; }
+    @keyframes tapFlash { from { opacity:1; transform:scale(.7); } to { opacity:0; transform:scale(1.25); } }
+
+    .dashboard-toolbar { display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:14px; }
+    .month-filter { display:flex; align-items:center; gap:8px; min-height:42px; border:1px solid var(--border); border-radius:16px; padding:0 11px; background:var(--surface); color:var(--text); box-shadow:inset 0 1px 0 rgba(255,255,255,.65); }
+    .month-filter select { max-width:150px; border:0; outline:0; background:transparent; color:inherit; font-weight:760; }
+
+    .lifetime-strip { display:grid; grid-template-columns:1fr; gap:1px; border:1px solid var(--border); border-radius:24px; margin:0 0 14px; padding:6px; background:var(--surface); }
+    .lifetime-item { min-width:0; border-radius:19px; padding:14px; background:rgba(255,255,255,.25); }
+    .lifetime-item span { display:block; color:var(--text-muted); font-size:.73rem; font-weight:710; }
+    .lifetime-item strong { display:block; margin-top:5px; overflow-wrap:anywhere; color:var(--text); font-size:1rem; letter-spacing:-.025em; }
+
+    .insights-grid { display:grid; grid-template-columns:1fr; gap:12px; margin-top:14px; }
+    .insight-card { min-height:188px; border:1px solid var(--border); border-radius:24px; padding:16px; background:var(--surface); }
+    .insight-card.featured { color:#fff; border-color:rgba(255,255,255,.24); background:linear-gradient(145deg, rgba(20,132,255,.94), rgba(93,74,224,.92)); box-shadow:0 22px 50px rgba(49,92,214,.28); }
+    .insight-card.featured .insight-label, .insight-card.featured .insight-copy, .insight-card.featured .muted { color:rgba(255,255,255,.76); }
+    .insight-card.featured .insight-value, .insight-card.featured .package-name { color:#fff; }
+    .insight-head { display:flex; align-items:center; justify-content:space-between; gap:10px; }
+    .insight-icon { width:38px; height:38px; display:grid; place-items:center; border-radius:14px; background:var(--accent-soft); color:var(--accent); }
+    .featured .insight-icon { background:rgba(255,255,255,.16); color:#fff; box-shadow:inset 0 1px 0 rgba(255,255,255,.22); }
+    .insight-label { color:var(--text-muted); font-size:.75rem; font-weight:790; letter-spacing:.06em; text-transform:uppercase; }
+    .insight-value { margin-top:16px; color:var(--text); font-size:1.35rem; font-weight:820; letter-spacing:-.035em; }
+    .insight-copy { margin:6px 0 0; color:var(--text-muted); font-size:.82rem; line-height:1.5; }
+    .prediction-list, .recommend-list { display:grid; gap:8px; margin-top:13px; }
+    .prediction-row, .recommend-row { display:flex; align-items:center; justify-content:space-between; gap:10px; border-radius:14px; padding:9px 10px; background:rgba(255,255,255,.38); color:var(--text-soft); font-size:.8rem; font-weight:680; }
+    html[data-theme="dark"] .prediction-row, html[data-theme="dark"] .recommend-row { background:rgba(255,255,255,.06); }
+    .prediction-row strong, .recommend-row strong { color:var(--text); white-space:nowrap; }
+    .featured .prediction-row { background:rgba(255,255,255,.12); color:rgba(255,255,255,.8); }
+    .featured .prediction-row strong { color:#fff; }
+
+    .profit-chip { display:inline-flex; align-items:center; gap:5px; margin-top:6px; border-radius:99px; padding:4px 8px; background:var(--green-soft); color:var(--green); font-size:.7rem; font-weight:800; }
+    .package-row { transition:transform .22s cubic-bezier(.2,.9,.25,1), box-shadow .22s ease; }
+    .package-row:hover { transform:translateY(-2px); box-shadow:0 12px 24px rgba(39,75,126,.1); }
+
+    .dream-hero { border:1px solid rgba(255,255,255,.28); border-radius:30px; padding:20px; color:#fff; background:linear-gradient(145deg, rgba(21,139,255,.95), rgba(117,69,226,.94)); box-shadow:0 28px 64px rgba(68,78,196,.28); }
+    .dream-hero .page-kicker, .dream-hero .page-subtitle { color:rgba(255,255,255,.75); }
+    .dream-hero .page-title { color:#fff; }
+    .dream-input-wrap { display:grid; gap:7px; margin-top:24px; }
+    .dream-input-wrap label { color:rgba(255,255,255,.75); font-size:.78rem; font-weight:720; }
+    .currency-input { display:flex; align-items:center; gap:8px; border:1px solid rgba(255,255,255,.32); border-radius:19px; padding:0 15px; background:rgba(255,255,255,.14); box-shadow:inset 0 1px 0 rgba(255,255,255,.2); }
+    .currency-input span { font-weight:800; }
+    .currency-input input { width:100%; min-height:58px; border:0; outline:0; background:transparent; color:#fff; font-size:1.35rem; font-weight:820; }
+    .currency-input input::placeholder { color:rgba(255,255,255,.46); }
+    .quick-targets { display:flex; flex-wrap:wrap; gap:7px; margin-top:10px; }
+    .quick-target { min-height:34px; border:1px solid rgba(255,255,255,.2); border-radius:99px; padding:0 11px; background:rgba(255,255,255,.12); color:#fff; font-size:.76rem; font-weight:760; cursor:pointer; }
+    .dream-results { display:grid; grid-template-columns:1fr; gap:12px; margin-top:14px; }
+    .target-progress { height:9px; overflow:hidden; border-radius:99px; margin-top:13px; background:var(--surface-muted); }
+    .target-progress i { display:block; height:100%; border-radius:inherit; background:linear-gradient(90deg,var(--accent),var(--violet)); transition:width .6s cubic-bezier(.2,.9,.2,1); }
+
+    .bottom-nav {
+      left: 10px;
+      right: 10px;
+      bottom: max(10px, env(safe-area-inset-bottom));
+      height: 72px;
+      grid-template-columns: repeat(5, 1fr);
+      align-items:center;
+      padding:7px 6px;
+      border-radius:27px;
+      isolation:isolate;
+    }
+
+    .bottom-nav::before { inset:0; border:1px solid rgba(255,255,255,.68); border-radius:27px; background:rgba(248,251,255,.69); box-shadow:0 20px 50px rgba(40,70,112,.22), inset 0 1px 0 rgba(255,255,255,.94); -webkit-mask:none; mask:none; }
+    html[data-theme="dark"] .bottom-nav::before { background:rgba(22,27,39,.76); border-color:rgba(255,255,255,.12); }
+    .nav-glider { position:absolute; z-index:1; left:6px; top:7px; width:calc((100% - 12px) / 5); height:58px; border:1px solid rgba(255,255,255,.76); border-radius:21px; background:linear-gradient(145deg,rgba(255,255,255,.8),rgba(221,237,255,.54)); box-shadow:0 8px 20px rgba(42,93,160,.14), inset 0 1px 0 #fff; transform:translateX(calc(var(--nav-slot, 0) * 100%)); transition:transform .46s cubic-bezier(.18,.86,.23,1.14); pointer-events:none; }
+    html[data-theme="dark"] .nav-glider { border-color:rgba(255,255,255,.12); background:linear-gradient(145deg,rgba(255,255,255,.12),rgba(255,255,255,.04)); box-shadow:inset 0 1px 0 rgba(255,255,255,.12); }
+    .bnav-btn { min-height:58px; gap:3px; border-radius:20px; }
+    .bnav-btn.active { color:var(--accent); }
+    .bnav-btn.active .icon { filter:drop-shadow(0 4px 7px rgba(0,122,255,.24)); }
+    .bnav-fab { position:relative; left:auto; top:-25px; z-index:4; width:66px; height:66px; border:1px solid rgba(255,255,255,.64); border-radius:23px; transform:perspective(140px) rotateX(5deg); background:linear-gradient(145deg,#48b4ff 0%,#0b78ed 48%,#5146db 100%); box-shadow:0 17px 26px rgba(15,94,214,.38), 0 5px 0 #0757b7, inset 0 2px 1px rgba(255,255,255,.64), inset 0 -5px 12px rgba(20,35,130,.25); transition:transform .18s cubic-bezier(.2,.8,.2,1),box-shadow .18s ease; }
+    .bnav-fab::before { content:""; position:absolute; inset:5px; border:1px solid rgba(255,255,255,.2); border-radius:18px; background:linear-gradient(145deg,rgba(255,255,255,.2),transparent 45%); }
+    .bnav-fab .icon, .bnav-fab span { position:relative; z-index:1; }
+    .bnav-fab:active { transform:translateY(4px) perspective(140px) rotateX(0) scale(.96); box-shadow:0 8px 16px rgba(15,94,214,.28), 0 2px 0 #0757b7, inset 0 2px 1px rgba(255,255,255,.5); }
+    .main { padding-bottom:calc(112px + env(safe-area-inset-bottom)); }
+
+    .modal { background:rgba(13,20,33,.3); -webkit-backdrop-filter:blur(10px); backdrop-filter:blur(10px); }
+    .modal.show .modal-panel { animation:sheetSpring .52s cubic-bezier(.16,.86,.25,1.08) both; }
+    @keyframes sheetSpring { 0% { opacity:0; transform:translateY(105%); } 72% { opacity:1; transform:translateY(-7px); } 100% { opacity:1; transform:translateY(0); } }
+
+    @media (min-width: 520px) {
+      .lifetime-strip { grid-template-columns:repeat(3,minmax(0,1fr)); }
+      .insights-grid, .dream-results { grid-template-columns:repeat(2,minmax(0,1fr)); }
+    }
+
+    @media (min-width: 768px) {
+      .topbar { left:18px; right:18px; }
+      .main { padding-top:94px; padding-bottom:40px; }
+      .insights-grid { grid-template-columns:repeat(3,minmax(0,1fr)); }
+      .dream-hero { padding:28px; }
+      .modal.show .modal-panel { animation:modalSpring .44s cubic-bezier(.18,.9,.23,1.12) both; }
+      @keyframes modalSpring { 0% { opacity:0; transform:translate(-50%,-45%) scale(.9); } 100% { opacity:1; transform:translate(-50%,-50%) scale(1); } }
+    }
+
+    @media (min-width: 1024px) {
+      .main { padding-top:28px; padding-bottom:40px; }
+      .sidebar { margin:12px; height:calc(100vh - 24px); width:calc(var(--sidebar-width) - 12px); border:1px solid rgba(255,255,255,.54); border-radius:28px; box-shadow:var(--shadow-soft),inset 0 1px 0 rgba(255,255,255,.72); }
+      .main { margin-left:var(--sidebar-width); }
+      .modal.show .modal-panel { animation:drawerSpring .48s cubic-bezier(.18,.9,.2,1) both; }
+      @keyframes drawerSpring { 0% { opacity:.4; transform:translateX(105%); } 100% { opacity:1; transform:translateX(0); } }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *, *::before, *::after { scroll-behavior:auto !important; animation-duration:.01ms !important; animation-iteration-count:1 !important; transition-duration:.01ms !important; }
+    }
   </style>
 </head>
 <body>
   <svg class="icon-sprite" aria-hidden="true">
+    <symbol id="i-bbi" viewBox="0 0 24 24"><path d="M6.5 5.5h5.25a3.25 3.25 0 0 1 0 6.5H6.5z"/><path d="M6.5 12h6.75a3.25 3.25 0 0 1 0 6.5H6.5z"/><path d="M17.5 5.5v13"/></symbol>
     <symbol id="i-package" viewBox="0 0 24 24"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><path d="M3.3 7 12 12l8.7-5"/><path d="M12 22V12"/></symbol>
     <symbol id="i-dashboard" viewBox="0 0 24 24"><path d="M4 4h7v7H4z"/><path d="M13 4h7v5h-7z"/><path d="M13 11h7v9h-7z"/><path d="M4 13h7v7H4z"/></symbol>
     <symbol id="i-plus" viewBox="0 0 24 24"><path d="M12 5v14"/><path d="M5 12h14"/></symbol>
@@ -1672,15 +1921,20 @@
     <symbol id="i-arrow-up" viewBox="0 0 24 24"><path d="m6 15 6-6 6 6"/></symbol>
     <symbol id="i-arrow-down" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></symbol>
     <symbol id="i-file" viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/></symbol>
+    <symbol id="i-target" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="3"/><path d="m14.5 9.5 5-5"/><path d="M16 4.5h3.5V8"/></symbol>
+    <symbol id="i-spark" viewBox="0 0 24 24"><path d="m12 2 1.45 5.05a5 5 0 0 0 3.5 3.5L22 12l-5.05 1.45a5 5 0 0 0-3.5 3.5L12 22l-1.45-5.05a5 5 0 0 0-3.5-3.5L2 12l5.05-1.45a5 5 0 0 0 3.5-3.5z"/></symbol>
+    <symbol id="i-trophy" viewBox="0 0 24 24"><path d="M8 4h8v5a4 4 0 0 1-8 0z"/><path d="M8 6H4v2a4 4 0 0 0 4 4M16 6h4v2a4 4 0 0 1-4 4M12 13v4M8 21h8M9 17h6v4"/></symbol>
+    <symbol id="i-layers" viewBox="0 0 24 24"><path d="m12 3 9 5-9 5-9-5z"/><path d="m3 12 9 5 9-5"/><path d="m3 16 9 5 9-5"/></symbol>
+    <symbol id="i-trend" viewBox="0 0 24 24"><path d="m3 17 6-6 4 4 7-8"/><path d="M15 7h5v5"/></symbol>
   </svg>
 
   <div id="app" class="app-shell">
     <aside class="sidebar" aria-label="Navigasi utama">
       <div class="brand">
-        <div class="brand-mark"><svg class="icon" width="23" height="23"><use href="#i-package"></use></svg></div>
+        <div class="brand-mark"><svg class="icon" width="23" height="23"><use href="#i-bbi"></use></svg></div>
         <div>
-          <div class="brand-title">BBI Cash Tracker</div>
-          <div class="brand-subtitle">Tracker paket terjual</div>
+          <div class="brand-title">BBI Flow</div>
+          <div class="brand-subtitle">Smart cash workspace</div>
         </div>
       </div>
 
@@ -1688,6 +1942,7 @@
         <button class="nav-btn active" data-nav="dashboard"><svg class="icon" width="18" height="18"><use href="#i-dashboard"></use></svg>Dashboard</button>
         <button class="nav-btn" data-nav="input"><svg class="icon" width="18" height="18"><use href="#i-plus"></use></svg>Input Bulan</button>
         <button class="nav-btn" data-nav="history"><svg class="icon" width="18" height="18"><use href="#i-history"></use></svg>Riwayat</button>
+        <button class="nav-btn" data-nav="dream"><svg class="icon" width="18" height="18"><use href="#i-target"></use></svg>Impian</button>
         <button class="nav-btn" data-nav="tools"><svg class="icon" width="18" height="18"><use href="#i-settings"></use></svg>Tools</button>
       </nav>
 
@@ -1699,9 +1954,9 @@
 
     <header class="topbar">
       <div class="topbar-left">
-        <div class="brand-mark"><svg class="icon" width="22" height="22"><use href="#i-package"></use></svg></div>
+        <div class="brand-mark"><svg class="icon" width="22" height="22"><use href="#i-bbi"></use></svg></div>
         <div class="topbar-title">
-          <strong>BBI Cash Tracker</strong>
+          <strong>BBI Flow</strong>
           <span id="topbarActiveMonth">Belum ada data</span>
         </div>
       </div>
@@ -1709,6 +1964,7 @@
         <button class="tab-link active" data-nav="dashboard">Dashboard</button>
         <button class="tab-link" data-nav="input">Input</button>
         <button class="tab-link" data-nav="history">Riwayat</button>
+        <button class="tab-link" data-nav="dream">Impian</button>
         <button class="tab-link" data-nav="tools">Tools</button>
       </div>
       <div class="topbar-actions">
@@ -1720,16 +1976,18 @@
       <section class="view active" id="view-dashboard"></section>
       <section class="view" id="view-input"></section>
       <section class="view" id="view-history"></section>
+      <section class="view" id="view-dream"></section>
       <section class="view" id="view-tools"></section>
     </main>
   </div>
 
   <nav class="bottom-nav" aria-label="Navigasi bawah">
-    <button class="bnav-btn active" data-nav="dashboard"><svg class="icon" width="20" height="20"><use href="#i-dashboard"></use></svg><span>Dashboard</span></button>
+    <span class="nav-glider" aria-hidden="true"></span>
+    <button class="bnav-btn active" data-nav="dashboard"><svg class="icon" width="20" height="20"><use href="#i-dashboard"></use></svg><span>Beranda</span></button>
     <button class="bnav-btn" data-nav="history"><svg class="icon" width="20" height="20"><use href="#i-history"></use></svg><span>Riwayat</span></button>
     <button class="bnav-fab" data-open-form aria-label="Input bulan"><svg class="icon" width="24" height="24"><use href="#i-plus"></use></svg><span>Input</span></button>
+    <button class="bnav-btn" data-nav="dream"><svg class="icon" width="20" height="20"><use href="#i-target"></use></svg><span>Impian</span></button>
     <button class="bnav-btn" data-nav="tools"><svg class="icon" width="20" height="20"><use href="#i-settings"></use></svg><span>Tools</span></button>
-    <button class="bnav-btn" data-theme-toggle data-theme-compact aria-label="Ganti tema"><svg class="icon" width="20" height="20"><use href="#i-moon"></use></svg><span>Tema</span></button>
   </nav>
 
   <div id="toastWrap" class="toast-wrap"></div>
@@ -1739,15 +1997,16 @@
   <script>
     const STORAGE_KEY = 'bbi_revenue_v1';
     const THEME_KEY = 'bbi_theme';
+    const DREAM_KEY = 'bbi_dream_target';
     const MONTHS = ['Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-    const VIEWS = ['dashboard', 'input', 'history', 'tools'];
+    const VIEWS = ['dashboard', 'input', 'history', 'dream', 'tools'];
 
     const PACKAGES = [
-      { id: 'alpha', name: 'Paket Alpha', color: '#0a84ff', income: 100000, checkout: 20000 },
-      { id: 'spesial', name: 'Paket Spesial', color: '#bf5af2', income: 199000, checkout: 65000 },
-      { id: 'sigma', name: 'Paket Sigma', color: '#64d2ff', income: 229000, checkout: 80000 },
-      { id: 'diamond', name: 'Paket Diamond', color: '#30d158', income: 289000, checkout: 120000 },
-      { id: 'secret', name: 'Paket Secret', color: '#ff9f0a', income: 389000, checkout: 225000 },
+      { id: 'alpha', name: 'Paket Alpha', color: '#0a84ff', income: 100000, checkout: 25000 },
+      { id: 'spesial', name: 'Paket Spesial', color: '#bf5af2', income: 199000, checkout: 70000 },
+      { id: 'sigma', name: 'Paket Sigma', color: '#00a6d7', income: 239000, checkout: 110000 },
+      { id: 'diamond', name: 'Paket Diamond', color: '#30b85b', income: 289000, checkout: 150000 },
+      { id: 'secret', name: 'Paket Secret', color: '#ff8a16', income: 389000, checkout: 265000 },
     ];
 
     const state = {
@@ -1758,6 +2017,9 @@
       formDirty: false,
       chartInstance: null,
       chartMetric: 'sisaBersih',
+      dashboardMonth: 'latest',
+      dreamTarget: 1000000,
+      deferredInstallPrompt: null,
       loading: true,
       historySort: { key: 'yearMonth', dir: 'desc' },
       importPreview: null,
@@ -1944,6 +2206,119 @@
       }, null);
     }
 
+    function packageProfit(pkg) {
+      return pkg.income - pkg.checkout;
+    }
+
+    function packageMargin(pkg) {
+      return pkg.income ? (packageProfit(pkg) / pkg.income) * 100 : 0;
+    }
+
+    function getDashboardRecord() {
+      if (state.dashboardMonth === 'latest') return getLatest();
+      const selected = state.data.find((row) => row.id === state.dashboardMonth);
+      if (selected) return selected;
+      state.dashboardMonth = 'latest';
+      return getLatest();
+    }
+
+    function getAllTimeTotals() {
+      return state.data.reduce((totals, row) => {
+        totals.income += Number(row.totalPemasukan || 0);
+        totals.checkout += Number(row.totalCheckout || 0);
+        totals.profit += Number(row.sisaBersih || 0);
+        totals.qty += getTotalQty(row.packages);
+        PACKAGES.forEach((pkg) => {
+          const qty = parseQty(row.packages?.[pkg.id]);
+          totals.byPackage[pkg.id].qty += qty;
+          totals.byPackage[pkg.id].profit += qty * packageProfit(pkg);
+        });
+        return totals;
+      }, {
+        income: 0,
+        checkout: 0,
+        profit: 0,
+        qty: 0,
+        byPackage: PACKAGES.reduce((acc, pkg) => {
+          acc[pkg.id] = { qty: 0, profit: 0 };
+          return acc;
+        }, {}),
+      });
+    }
+
+    function getProfitLeaders() {
+      const all = getAllTimeTotals();
+      const realized = [...PACKAGES]
+        .map((pkg) => ({ pkg, ...all.byPackage[pkg.id] }))
+        .sort((a, b) => b.profit - a.profit)[0];
+      const perUnit = [...PACKAGES]
+        .map((pkg) => ({ pkg, profit: packageProfit(pkg), margin: packageMargin(pkg) }))
+        .sort((a, b) => b.profit - a.profit)[0];
+      return { realized, perUnit };
+    }
+
+    function getNextMonthLabel() {
+      const latest = getLatest();
+      const date = latest ? new Date(latest.year, latest.month, 1) : new Date();
+      return formatMonth(date.getMonth() + 1, date.getFullYear());
+    }
+
+    function getPrediction() {
+      const rows = sortAsc(state.data).slice(-6);
+      if (!rows.length) return null;
+      const quantities = {};
+      PACKAGES.forEach((pkg) => {
+        const values = rows.map((row) => parseQty(row.packages?.[pkg.id]));
+        const weightTotal = values.reduce((sum, _, index) => sum + index + 1, 0);
+        const weightedAverage = values.reduce((sum, value, index) => sum + value * (index + 1), 0) / weightTotal;
+        const trend = values.length > 1 ? (values[values.length - 1] - values[0]) / (values.length - 1) : 0;
+        quantities[pkg.id] = Math.max(0, Math.round(weightedAverage + trend * 0.35));
+      });
+      const totals = calcTotals(quantities);
+      const confidence = Math.min(88, 42 + rows.length * 8);
+      return {
+        label: getNextMonthLabel(),
+        quantities,
+        totals,
+        profit: totals.totalPemasukan - totals.totalCheckout,
+        confidence,
+        sampleSize: rows.length,
+      };
+    }
+
+    function buildDreamPlan(target = state.dreamTarget) {
+      const cleanTarget = Math.max(0, Math.round(Number(target) || 0));
+      const prediction = getPrediction();
+      const baseQty = prediction ? { ...prediction.quantities } : defaultQty();
+      const baseProfit = prediction?.profit || 0;
+      const historyTotals = getAllTimeTotals();
+      const ranked = [...PACKAGES].sort((a, b) => {
+        const aSeen = historyTotals.byPackage[a.id].qty;
+        const bSeen = historyTotals.byPackage[b.id].qty;
+        const aScore = packageProfit(a) * (aSeen ? 1 + Math.log10(aSeen + 1) * 0.18 : 0.76);
+        const bScore = packageProfit(b) * (bSeen ? 1 + Math.log10(bSeen + 1) * 0.18 : 0.76);
+        return bScore - aScore;
+      });
+      const focus = ranked[0];
+      const recommended = { ...baseQty };
+      const gap = Math.max(0, cleanTarget - baseProfit);
+      const extra = focus ? Math.ceil(gap / packageProfit(focus)) : 0;
+      if (focus) recommended[focus.id] += extra;
+      const recommendedTotals = calcTotals(recommended);
+      const recommendedProfit = recommendedTotals.totalPemasukan - recommendedTotals.totalCheckout;
+      return { cleanTarget, prediction, baseQty, baseProfit, recommended, recommendedProfit, focus, extra };
+    }
+
+    function predictionRows(qtyMap, emptyText = 'Belum ada basis prediksi') {
+      if (!qtyMap) return `<div class="empty-inline" style="min-height:92px">${emptyText}</div>`;
+      return PACKAGES.map((pkg) => `
+        <div class="prediction-row">
+          <span>${pkg.name.replace('Paket ', '')}</span>
+          <strong>${parseQty(qtyMap[pkg.id])} paket</strong>
+        </div>
+      `).join('');
+    }
+
     function showToast(message, type = 'success') {
       const wrap = document.getElementById('toastWrap');
       const toast = document.createElement('div');
@@ -2002,8 +2377,9 @@
         root.innerHTML = `
           <div class="page-head">
             <div>
-              <h1 class="page-title">Dashboard</h1>
-              <p class="page-subtitle">Ringkasan pemasukan, checkout, dan sisa bersih.</p>
+              <p class="page-kicker">Financial workspace</p>
+              <h1 class="page-title">Ikhtisar bisnis</h1>
+              <p class="page-subtitle">Menyiapkan insight dan prediksi terbaru.</p>
             </div>
           </div>
           <div class="skeleton-grid">
@@ -2016,38 +2392,62 @@
         return;
       }
 
-      const latest = getLatest();
-      const previous = getPreviousLatest();
-      const growth = formatGrowth(calcGrowth(latest?.sisaBersih || 0, previous?.sisaBersih));
-      const latestTotals = latest ? calcTotals(latest.packages) : calcTotals(defaultQty());
-      const latestQty = latest ? getTotalQty(latest.packages) : 0;
-      const best = getBestPackage(latest);
-      const monthLabel = latest ? latest.label : 'Belum ada data';
+      const selected = getDashboardRecord();
+      const sorted = sortAsc(state.data);
+      const selectedIndex = selected ? sorted.findIndex((row) => row.id === selected.id) : -1;
+      const previous = selectedIndex > 0 ? sorted[selectedIndex - 1] : null;
+      const growth = formatGrowth(calcGrowth(selected?.sisaBersih || 0, previous?.sisaBersih));
+      const selectedTotals = selected ? calcTotals(selected.packages) : calcTotals(defaultQty());
+      const selectedQty = selected ? getTotalQty(selected.packages) : 0;
+      const selectedMargin = selected?.totalPemasukan ? (selected.sisaBersih / selected.totalPemasukan) * 100 : 0;
+      const best = getBestPackage(selected);
+      const monthLabel = selected ? selected.label : 'Belum ada data';
+      const allTime = getAllTimeTotals();
+      const leaders = getProfitLeaders();
+      const prediction = getPrediction();
 
       root.innerHTML = `
         <div class="page-head">
           <div>
-            <h1 class="page-title">Dashboard</h1>
-            <p class="page-subtitle">${monthLabel}</p>
+            <p class="page-kicker">Financial workspace</p>
+            <h1 class="page-title">Ikhtisar bisnis</h1>
+            <p class="page-subtitle">Pantau performa, margin, dan peluang bulan berikutnya.</p>
           </div>
           <button class="btn" data-open-form>${icon('plus', 18)}Tambah Bulan</button>
         </div>
 
+        <div class="dashboard-toolbar">
+          <div class="month-filter">
+            ${icon('calendar', 17)}
+            <select id="dashboardMonthFilter" aria-label="Pilih bulan dashboard">
+              <option value="latest" ${state.dashboardMonth === 'latest' ? 'selected' : ''}>Bulan terbaru</option>
+              ${sortDesc(state.data).map((row) => `<option value="${row.id}" ${state.dashboardMonth === row.id ? 'selected' : ''}>${row.label}</option>`).join('')}
+            </select>
+          </div>
+          <span class="status-pill">${monthLabel}</span>
+        </div>
+
         <div class="summary-grid">
-          ${metricCard({ label: 'Pemasukan', value: formatRupiah(latest?.totalPemasukan || 0), note: 'Total masuk bulan aktif', iconName: 'wallet', counter: 'pemasukan' })}
-          ${metricCard({ label: 'Checkout', value: formatRupiah(latest?.totalCheckout || 0), note: 'Total biaya checkout', iconName: 'download', tone: 'red', counter: 'checkout' })}
-          ${metricCard({ label: 'Sisa Bersih', value: formatRupiah(latest?.sisaBersih || 0), note: 'Pemasukan dikurangi checkout', iconName: 'chart', tone: 'green', counter: 'sisa' })}
+          ${metricCard({ label: 'Pemasukan', value: formatRupiah(selected?.totalPemasukan || 0), note: `Total masuk ${monthLabel}`, iconName: 'wallet', counter: 'pemasukan' })}
+          ${metricCard({ label: 'Checkout', value: formatRupiah(selected?.totalCheckout || 0), note: 'Total biaya checkout', iconName: 'download', tone: 'red', counter: 'checkout' })}
+          ${metricCard({ label: 'Profit Bersih', value: formatRupiah(selected?.sisaBersih || 0), note: `Margin bulan ini ${selectedMargin.toLocaleString('id-ID', { maximumFractionDigits: 1 })}%`, iconName: 'trend', tone: 'green', counter: 'sisa' })}
           <article class="metric-card">
             <div class="metric-top">
               <span>Growth</span>
               <span class="growth-badge ${growth.cls}">${growth.text}</span>
             </div>
             <div>
-              <div class="metric-value">${latestQty.toLocaleString('id-ID')} paket</div>
+              <div class="metric-value">${selectedQty.toLocaleString('id-ID')} paket</div>
               <div class="metric-note">${best?.qty ? `${best.pkg.name} paling banyak` : 'Belum ada paket terjual'}</div>
             </div>
           </article>
         </div>
+
+        <section class="lifetime-strip" aria-label="Total seluruh bulan">
+          <div class="lifetime-item"><span>Total pemasukan semua bulan</span><strong>${formatRupiah(allTime.income)}</strong></div>
+          <div class="lifetime-item"><span>Total checkout semua bulan</span><strong>${formatRupiah(allTime.checkout)}</strong></div>
+          <div class="lifetime-item"><span>Akumulasi profit bersih</span><strong>${formatRupiah(allTime.profit)}</strong></div>
+        </section>
 
         <div class="dashboard-grid">
           <section class="panel">
@@ -2073,10 +2473,36 @@
               </div>
             </div>
             <div class="package-list">
-              ${PACKAGES.map((pkg) => renderPackageRow(pkg, latest, latestTotals, latestQty)).join('')}
+              ${PACKAGES.map((pkg) => renderPackageRow(pkg, selected, selectedTotals, selectedQty)).join('')}
             </div>
           </section>
         </div>
+
+        <section class="insights-grid">
+          <article class="insight-card featured">
+            <div class="insight-head"><span class="insight-label">Paling cuan aktual</span><span class="insight-icon">${icon('trophy', 19)}</span></div>
+            <div class="insight-value">${leaders.realized?.profit ? leaders.realized.pkg.name : 'Belum tersedia'}</div>
+            <p class="insight-copy">${leaders.realized?.profit ? `${formatRupiah(leaders.realized.profit)} profit dari ${leaders.realized.qty} penjualan sepanjang riwayat.` : 'Tambahkan data penjualan untuk menemukan paket paling menghasilkan.'}</p>
+          </article>
+          <article class="insight-card">
+            <div class="insight-head"><span class="insight-label">Profit unit terbesar</span><span class="insight-icon">${icon('layers', 19)}</span></div>
+            <div class="insight-value">${leaders.perUnit.pkg.name}</div>
+            <p class="insight-copy">${formatRupiah(leaders.perUnit.profit)} bersih per paket dengan margin ${leaders.perUnit.margin.toLocaleString('id-ID', { maximumFractionDigits: 1 })}%.</p>
+          </article>
+          <article class="insight-card">
+            <div class="insight-head"><span class="insight-label">Prediksi ${prediction?.label || 'bulan depan'}</span><span class="insight-icon">${icon('spark', 19)}</span></div>
+            <div class="insight-value">${prediction ? formatRupiah(prediction.profit) : 'Butuh data'}</div>
+            <p class="insight-copy">${prediction ? `Estimasi profit dengan keyakinan ${prediction.confidence}% dari ${prediction.sampleSize} bulan terakhir.` : 'Simpan minimal satu bulan untuk membuat proyeksi awal.'}</p>
+          </article>
+        </section>
+
+        <section class="panel" style="margin-top:14px">
+          <div class="panel-head">
+            <div><h2 class="panel-title">Prediksi paket bulan berikutnya</h2><p class="panel-subtitle">Rata-rata berbobot dan arah tren riwayat; estimasi, bukan kepastian.</p></div>
+            <button class="icon-btn" data-nav="dream">${icon('target', 16)}Atur Impian</button>
+          </div>
+          <div class="prediction-list">${predictionRows(prediction?.quantities)}</div>
+        </section>
 
         <section class="panel" style="margin-top:14px">
           <div class="panel-head">
@@ -2105,9 +2531,9 @@
       root.querySelectorAll('[data-counter]').forEach((el) => {
         const key = el.dataset.counter;
         const valueMap = {
-          pemasukan: latest?.totalPemasukan || 0,
-          checkout: latest?.totalCheckout || 0,
-          sisa: latest?.sisaBersih || 0,
+          pemasukan: selected?.totalPemasukan || 0,
+          checkout: selected?.totalCheckout || 0,
+          sisa: selected?.sisaBersih || 0,
         };
         animateCounter(el, valueMap[key] || 0);
       });
@@ -2134,6 +2560,7 @@
             <div>
               <div class="package-name">${pkg.name}</div>
               <div class="package-meta">${formatRupiah(pkg.income)} masuk / ${formatRupiah(pkg.checkout)} checkout</div>
+              <span class="profit-chip">${packageMargin(pkg).toLocaleString('id-ID', { maximumFractionDigits: 1 })}% margin</span>
             </div>
             <span class="qty-chip">${qty} terjual</span>
           </div>
@@ -2141,6 +2568,7 @@
             <div class="subtotal-box">Masuk<strong>${formatRupiah(subtotal.subtotalIn)}</strong></div>
             <div class="subtotal-box">Checkout<strong>${formatRupiah(subtotal.subtotalOut)}</strong></div>
           </div>
+          <div class="history-total"><span>Profit paket</span><span class="mono">${formatRupiah(subtotal.subtotalIn - subtotal.subtotalOut)}</span></div>
           <div class="progress-track"><i style="width:${pct}%"></i></div>
         </article>
       `;
@@ -2331,6 +2759,7 @@
                   <div>
                     <div class="package-name">${pkg.name}</div>
                     <div class="price-meta">1 unit paket</div>
+                    <span class="profit-chip">Profit ${formatRupiah(packageProfit(pkg))} · ${packageMargin(pkg).toLocaleString('id-ID', { maximumFractionDigits: 1 })}%</span>
                   </div>
                   <div class="price-values">
                     <strong>${formatRupiah(pkg.income)}</strong>
@@ -2468,6 +2897,64 @@
       return pills || '<span class="pill">Tidak ada paket</span>';
     }
 
+    function renderDream() {
+      const root = document.getElementById('view-dream');
+      const plan = buildDreamPlan();
+      const prediction = plan.prediction;
+      const progress = plan.cleanTarget ? Math.min(100, Math.round((plan.baseProfit / plan.cleanTarget) * 100)) : 0;
+      const targetGap = Math.max(0, plan.cleanTarget - plan.baseProfit);
+      const likelyText = prediction
+        ? `${prediction.label} diproyeksikan menghasilkan ${formatRupiah(plan.baseProfit)} profit.`
+        : 'Masukkan riwayat bulanan agar skenario paling mungkin dapat dihitung.';
+
+      root.innerHTML = `
+        <section class="dream-hero">
+          <p class="page-kicker">Goal simulator</p>
+          <h1 class="page-title">Impian bulan depan</h1>
+          <p class="page-subtitle">Tentukan target profit bersih. Sistem menyusun kombinasi penjualan dari kebiasaan historis dan nilai profit tiap paket.</p>
+          <div class="dream-input-wrap">
+            <label for="dreamTarget">Target profit bersih</label>
+            <div class="currency-input"><span>Rp</span><input id="dreamTarget" type="number" min="0" step="50000" inputmode="numeric" value="${plan.cleanTarget || ''}" placeholder="1.000.000" /></div>
+          </div>
+          <div class="quick-targets" aria-label="Pilihan target cepat">
+            <button class="quick-target" data-dream-quick="500000">Rp 500 rb</button>
+            <button class="quick-target" data-dream-quick="1000000">Rp 1 jt</button>
+            <button class="quick-target" data-dream-quick="2500000">Rp 2,5 jt</button>
+            <button class="quick-target" data-dream-quick="5000000">Rp 5 jt</button>
+          </div>
+        </section>
+
+        <div class="dream-results">
+          <article class="insight-card">
+            <div class="insight-head"><span class="insight-label">Skenario paling mungkin</span><span class="insight-icon">${icon('trend', 19)}</span></div>
+            <div class="insight-value">${prediction ? formatRupiah(plan.baseProfit) : 'Belum tersedia'}</div>
+            <p class="insight-copy">${likelyText}</p>
+            <div class="target-progress" title="${progress}% dari target"><i style="width:${progress}%"></i></div>
+            <p class="insight-copy">${prediction ? `${progress}% dari target · selisih ${formatRupiah(targetGap)}` : 'Prediksi akan aktif setelah data pertama disimpan.'}</p>
+            <div class="prediction-list">${predictionRows(prediction?.quantities)}</div>
+          </article>
+
+          <article class="insight-card featured">
+            <div class="insight-head"><span class="insight-label">Rekomendasi menuju target</span><span class="insight-icon">${icon('target', 19)}</span></div>
+            <div class="insight-value">${formatRupiah(plan.recommendedProfit)}</div>
+            <p class="insight-copy">${plan.focus ? `${plan.extra ? `Tambahkan ${plan.extra} ${plan.focus.name}` : 'Proyeksi saat ini sudah memenuhi target'}; ${prediction ? 'dipilih dari kombinasi profit dan peluang historis.' : 'rekomendasi awal memprioritaskan profit per unit karena riwayat belum tersedia.'}` : 'Isi target untuk membuat rekomendasi.'}</p>
+            <div class="prediction-list">${predictionRows(plan.recommended)}</div>
+          </article>
+        </div>
+
+        <section class="panel" style="margin-top:14px">
+          <div class="panel-head"><div><h2 class="panel-title">Dasar rekomendasi</h2><p class="panel-subtitle">Profit per unit setelah biaya checkout.</p></div><button class="btn" data-save-dream>${icon('save', 16)}Simpan Target</button></div>
+          <div class="package-list">
+            ${PACKAGES.map((pkg) => `
+              <article class="package-row" style="--pkg:${pkg.color}">
+                <div class="package-row-top"><div><div class="package-name">${pkg.name}</div><div class="package-meta">Profit ${formatRupiah(packageProfit(pkg))} per unit</div></div><span class="profit-chip">${packageMargin(pkg).toLocaleString('id-ID', { maximumFractionDigits: 1 })}%</span></div>
+              </article>
+            `).join('')}
+          </div>
+        </section>
+      `;
+    }
+
     function renderTools() {
       const root = document.getElementById('view-tools');
       const bytes = new Blob([JSON.stringify(state.data)]).size;
@@ -2480,6 +2967,19 @@
         </div>
 
         <div class="tools-grid">
+          <article class="tool-card">
+            <div>
+              <div class="tool-card-top">
+                <div>
+                  <h2 class="panel-title">Pasang Aplikasi</h2>
+                  <p class="muted">Tambahkan BBI Flow ke layar utama untuk pengalaman PWA penuh.</p>
+                </div>
+                <span class="tool-icon">${icon('spark', 18)}</span>
+              </div>
+            </div>
+            <button class="btn full" data-tool="install">${icon('download', 16)}${state.deferredInstallPrompt ? 'Pasang Sekarang' : 'Panduan Instalasi'}</button>
+          </article>
+
           <article class="tool-card">
             <div>
               <div class="tool-card-top">
@@ -2540,6 +3040,7 @@
       renderDashboard();
       renderInput();
       renderHistory();
+      renderDream();
       renderTools();
       navigate(state.currentView, false);
       updateActiveMonthBadge();
@@ -2566,6 +3067,11 @@
       document.querySelectorAll('[data-nav]').forEach((el) => {
         el.classList.toggle('active', el.dataset.nav === view);
       });
+      const navSlots = { dashboard: 0, history: 1, dream: 3, tools: 4 };
+      const bottomNav = document.querySelector('.bottom-nav');
+      if (bottomNav && Object.hasOwn(navSlots, view)) {
+        bottomNav.style.setProperty('--nav-slot', navSlots[view]);
+      }
       if (pushHistory && history.state?.view !== view) {
         history.pushState({ view }, '', `#${view}`);
       }
@@ -2673,6 +3179,7 @@
               <div>
                 <div class="pkg-input-name">${pkg.name}</div>
                 <div class="pkg-hint">${formatRupiah(pkg.income)} masuk / ${formatRupiah(pkg.checkout)} checkout</div>
+                <span class="profit-chip">Profit ${packageMargin(pkg).toLocaleString('id-ID', { maximumFractionDigits: 1 })}% · ${formatRupiah(packageProfit(pkg))}</span>
               </div>
               <div class="qty-control" aria-label="Jumlah ${pkg.name}">
                 <button class="q-btn" type="button" data-qty="minus" data-pkg="${pkg.id}" title="Kurangi">${icon('minus', 16)}</button>
@@ -2711,10 +3218,11 @@
       if (!box) return;
       const totals = calcTotals(state.formQty);
       const sisa = totals.totalPemasukan - totals.totalCheckout;
+      const margin = totals.totalPemasukan ? (sisa / totals.totalPemasukan) * 100 : 0;
       box.innerHTML = `
         <div class="summary-row"><span>Total Pemasukan</span><strong>${formatRupiah(totals.totalPemasukan)}</strong></div>
         <div class="summary-row"><span>Total Checkout</span><strong>${formatRupiah(totals.totalCheckout)}</strong></div>
-        <div class="summary-row final"><span>Sisa Bersih</span><strong>${formatRupiah(sisa)}</strong></div>
+        <div class="summary-row final"><span>Profit Bersih · ${margin.toLocaleString('id-ID', { maximumFractionDigits: 1 })}%</span><strong>${formatRupiah(sisa)}</strong></div>
       `;
     }
 
@@ -2796,6 +3304,7 @@
       saveData();
       closeForm(true);
       state.currentView = 'dashboard';
+      state.dashboardMonth = id;
       renderApp();
       showToast('Data berhasil disimpan', 'success');
     }
@@ -2859,8 +3368,20 @@
       const nextTheme = isDark ? 'light' : 'dark';
       document.documentElement.dataset.theme = nextTheme;
       localStorage.setItem(THEME_KEY, nextTheme);
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', nextTheme === 'dark' ? '#080b12' : '#eef6ff');
       updateThemeToggleUI();
       if (!state.loading) renderChart();
+    }
+
+    async function installPWA() {
+      if (!state.deferredInstallPrompt) {
+        showToast('Gunakan menu browser lalu pilih Tambahkan ke layar utama', 'info');
+        return;
+      }
+      state.deferredInstallPrompt.prompt();
+      await state.deferredInstallPrompt.userChoice;
+      state.deferredInstallPrompt = null;
+      renderTools();
     }
 
     function updateThemeToggleUI() {
@@ -2878,6 +3399,14 @@
 
     function bindEvents() {
       document.addEventListener('click', (event) => {
+        const tappable = event.target.closest('button, .metric-card, .package-row');
+        if (tappable) {
+          tappable.classList.remove('tap-pulse');
+          void tappable.offsetWidth;
+          tappable.classList.add('tap-pulse');
+          setTimeout(() => tappable.classList.remove('tap-pulse'), 380);
+        }
+
         if (event.target.closest('[data-theme-toggle]')) {
           toggleTheme();
           return;
@@ -2909,6 +3438,19 @@
         if (metric) {
           state.chartMetric = metric.dataset.metric;
           renderDashboard();
+          return;
+        }
+
+        const quickTarget = event.target.closest('[data-dream-quick]');
+        if (quickTarget) {
+          state.dreamTarget = Math.max(0, Number(quickTarget.dataset.dreamQuick) || 0);
+          renderDream();
+          return;
+        }
+
+        if (event.target.closest('[data-save-dream]')) {
+          localStorage.setItem(DREAM_KEY, String(state.dreamTarget));
+          showToast('Target impian disimpan', 'success');
           return;
         }
 
@@ -2967,6 +3509,9 @@
           if (type === 'reset') {
             resetDataFlow();
           }
+          if (type === 'install') {
+            installPWA();
+          }
           return;
         }
 
@@ -2993,6 +3538,10 @@
       });
 
       document.addEventListener('input', (event) => {
+        if (event.target.id === 'dreamTarget') {
+          state.dreamTarget = Math.max(0, Number(event.target.value) || 0);
+          return;
+        }
         const qtyInput = event.target.closest('[data-pkg-input]');
         if (!qtyInput) return;
         const id = qtyInput.dataset.pkgInput;
@@ -3003,6 +3552,18 @@
       });
 
       document.addEventListener('change', (event) => {
+        if (event.target.id === 'dashboardMonthFilter') {
+          state.dashboardMonth = event.target.value;
+          renderDashboard();
+          return;
+        }
+
+        if (event.target.id === 'dreamTarget') {
+          state.dreamTarget = Math.max(0, Number(event.target.value) || 0);
+          renderDream();
+          return;
+        }
+
         if (event.target.id === 'formMonth' || event.target.id === 'formYear') {
           state.formDirty = true;
           detectDuplicateMode();
@@ -3036,6 +3597,17 @@
     }
 
     function bindSystemAlerts() {
+      window.addEventListener('beforeinstallprompt', (event) => {
+        event.preventDefault();
+        state.deferredInstallPrompt = event;
+        if (state.currentView === 'tools') renderTools();
+      });
+
+      window.addEventListener('appinstalled', () => {
+        state.deferredInstallPrompt = null;
+        showToast('BBI Flow berhasil dipasang', 'success');
+      });
+
       window.addEventListener('beforeunload', (event) => {
         if (!state.formDirty) return;
         event.preventDefault();
@@ -3069,6 +3641,8 @@
     (function init() {
       const savedTheme = localStorage.getItem(THEME_KEY) || 'light';
       document.documentElement.dataset.theme = savedTheme;
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', savedTheme === 'dark' ? '#080b12' : '#eef6ff');
+      state.dreamTarget = Math.max(0, Number(localStorage.getItem(DREAM_KEY)) || 1000000);
       state.currentView = getViewFromHash();
       history.replaceState({ view: state.currentView }, '', `#${state.currentView}`);
       state.data = loadData();
@@ -3080,6 +3654,9 @@
         state.loading = false;
         renderDashboard();
       }, 240);
+      if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+        window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {}));
+      }
     })();
   </script>
 </body>

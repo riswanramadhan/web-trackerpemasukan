@@ -1,0 +1,36 @@
+{
+  "name": "BBI Flow — Cash Tracker",
+  "short_name": "BBI Flow",
+  "description": "Pelacak pemasukan, checkout, profit, target, dan prediksi paket BBI.",
+  "id": "./",
+  "start_url": "./index.html#dashboard",
+  "scope": "./",
+  "display": "standalone",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "portrait-primary",
+  "background_color": "#eef6ff",
+  "theme_color": "#eef6ff",
+  "categories": ["finance", "business", "productivity"],
+  "icons": [
+    {
+      "src": "icons/icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Input Bulan",
+      "short_name": "Input",
+      "url": "./index.html#input",
+      "icons": [{ "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+    },
+    {
+      "name": "Impian",
+      "short_name": "Impian",
+      "url": "./index.html#dream",
+      "icons": [{ "src": "icons/icon.svg", "sizes": "any", "type": "image/svg+xml" }]
+    }
+  ]
+}
